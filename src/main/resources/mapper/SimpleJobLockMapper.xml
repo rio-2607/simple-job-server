@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beautyboss.slogen.simplejobserver.mapper.SimpleJobLockMapper">
+
+
+    <sql id="tableName">simple_job_lock</sql>
+
+    <insert id="insertJobLock" parameterType="map">
+        INSERT IGNORE INTO
+        <include refid="tableName"/>
+        (JobName, JobHash, Status, host,AddTime)
+        VALUES
+        (
+        #{jobName},
+        #{jobHash},
+        #{status},
+        #{host},
+        now()
+        )
+    </insert>
+
+    <update id="updateStatus" parameterType="map">
+        UPDATE
+        <include refid="tableName"/>
+        SET Status = #{newStatus}
+        WHERE JobHash = #{jobHash}
+        AND Status = #{oldStatus}
+    </update>
+
+    <select id="getJobLockStatus" parameterType="map" resultType="int">
+        SELECT
+        Status
+        from
+        <include refid="tableName"/>
+        where JobHash = #{jobHash}
+    </select>
+
+    <select id="getJobLockHost" parameterType="map" resultType="String">
+        SELECT
+        host
+        from
+        <include refid="tableName"/>
+        where JobHash = #{jobHash}
+    </select>
+</mapper>

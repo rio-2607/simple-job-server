@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{~/css/bootstrap-theme.min.css}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>AmJobServer Admin</title>
+</head>
+
+<body role="document">
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand active" href="#">SimpleJobServer Admin</a>
+        </div>
+    </div>
+</div>
+
+<div class="container theme-showcase" style="margin-top: 80px;" role="main">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-success">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <a class="btn btn-success" role="button" data-toggle="collapse" data-parent="#accordion"
+                   href="#collapseTwo" aria-controls="collapseTwo">查询Job执行结果</a>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <div class="bs-example">
+                        <div class="tab-content">
+                            <div id="AddJob1" class="tab-pane fade in active">
+                                <br>
+                                <table class="table table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <td>JobName:</td>
+                                        <td><input class="form-control" name="searchJobName"
+                                                   value="jobName">
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>查询起始时间:</td>
+                                        <td>
+                                            <!--<input type="text" id="begin" placeholder="起始时间" >-->
+                                            <input class="form-control" name="startTime" type="date">
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>查询结束时间:</td>
+                                        <td>
+                                            <!--<input type="text" id="end" placeholder="截止时间" >-->
+                                            <input class="form-control" name="finishTime" type="date"></td>
+                                        <td></td>
+                                        <td>
+                                        <button type="search"
+                                                class="btn btn-sm btn-danger"
+                                                onclick="doSearch(this)">
+                                            查询
+                                        </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>JobName</th>
+                                        <th>Host</th>
+                                        <th>StartedTime</th>
+                                        <th>FinishedTime</th>
+                                        <th>Mesage</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="jobLogs">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>JobName</th>
+                    <th>Status</th>
+                    <th>FireTime</th>
+                    <th>Previous<br>FireTime</th>
+                    <th>Next<br>FireTime</th>
+                    <th>Cron<br>Expression</th>
+                    <th>Switch<br>Status</th>
+                    <th>Option</th>
+                </tr>
+                </thead>
+                <tbody id="jobListContent">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- opr result popup Modal -->
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body" id="resultModalMsg">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{~/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
+<script th:src="@{~/js/jquery.loadTemplate-1.4.5.min.js}" type="text/javascript"></script>
+<script th:src="@{~/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{~/js/jquery.bootstrap.min.js}" type="text/javascript"></script>
+
+<!--tasks content list template-->
+<script type="text/html" id="jobDetail">
+    <tr>
+        <td data-content="JobName"></td>
+        <td data-content="Status"></td>
+        <td data-content="FireTime"></td>
+        <td data-content="PreviousFireTime"></td>
+        <td data-content="NextFireTime"></td>
+        <td>
+            <input class="form-control" data-value="CronExpression">
+        </td>
+        <td>
+            <button type="button"
+                    onclick="doOperation(this)"
+                    data-class="SwitchStatusClass"
+                    data-template-bind='[{"attribute": "data-url", "value": "SwitchStatusUrl"}]'
+                    data-content="SwitchStatus">
+            </button>
+        </td>
+        <td>
+            <p>
+                <button type="button"
+                        class="btn btn-sm btn-primary"
+                        onclick="doOperation(this)"
+                        data-template-bind='[{"attribute": "data-url", "value": "OptionSaveChange"}]'>
+                    Save
+                </button>
+                <button type="button"
+                        class="btn btn-sm btn-info"
+                        onclick="doOperation(this)"
+                        data-template-bind='[{"attribute": "data-url", "value": "OptionUnlock"}]'>
+                    Unlock
+                </button>
+                <button type="button"
+                        class="btn btn-sm btn-warning"
+                        onclick="doOperation(this)"
+                        data-template-bind='[{"attribute": "data-url", "value": "OptionKill"}]'>
+                    Kill
+                </button>
+                <button type="button"
+                        class="btn btn-sm btn-danger"
+                        onclick="doOperation(this)"
+                        data-template-bind='[{"attribute": "data-url", "value": "OptionRun"}]'>
+                    Run
+                </button>
+            </p>
+        </td>
+    </tr>
+</script>
+
+<script type="text/html" id="jobLogDetail">
+    <tr>
+        <td data-content="JobName"></td>
+        <td data-content="Host"></td>
+        <td data-content="StartedTime"></td>
+        <td data-content="FinishedTime"></td>
+        <td data-content="Message"></td>
+    </tr>
+</script>
+
+<script type="text/javascript">
+
+    $(function () {
+        var jobListUrl = '/amjob/jobs/list';
+        $.getJSON(jobListUrl, function (json) {
+            var jobList = [];
+            if(10000 == json.status) {
+                $.each(json.data, function (index, value) {
+                    var triggerList = value.triggerList[0];
+                    jobList[index] = {
+                        JobName: value.name,
+                        Status: value.status,
+                        Duration: value.runTime,
+                        FireTime: value.fireTime == null ? "" : date2Str(value.fireTime),//.replace(" ", '<br>'),
+                        CronExpression: triggerList == null ? "" : triggerList.cronExpression,
+                        PreviousFireTime: triggerList == null ? "" : triggerList.previousFireTime == null ? "" : date2Str(triggerList.previousFireTime),//.replace(" ", '<br>'),
+                        NextFireTime: triggerList == null ? "" : triggerList.nextFireTime == null ? "" : date2Str(triggerList.nextFireTime),//.replace(" ", '<br>'),
+                        SwitchStatus: value.switchOff ? "Off" : "On",
+                        SwitchStatusClass: value.switchOff ? "btn btn-sm btn-default" : "btn btn-sm btn-success",
+                        SwitchStatusUrl: "/amjob/jobs" + (value.switchOff ? "/turnOn" : "/turnOff") + "?jobName=" + value.name,
+                        OptionRun: "/amjob/jobs/run?jobName=" + value.name,
+                        OptionKill: "/amjob/jobs/kill?jobName=" + value.name,
+                        OptionUnlock: "/amjob/jobs/unlock?jobName=" + value.name,
+//                        OptionSaveChange: "/amjob/jobs" + value.name + "/setCronExpression?cronExpression="
+                    };
+                });
+            }
+
+            $("#jobCounts").html(jobList.length);
+            $("#jobListContent").loadTemplate($("#jobDetail"), jobList);
+        });
+    });
+
+    function doSearch(item) {
+        $(function() {
+            console.log("wulallallllll");
+            var jobName = $('[name|="searchJobName"]').val();
+            var startTime = $('[name|="startTime"]').val();
+            var finishTime = $('[name|="finishTime"]').val();
+            var requestUrl = "/amjob/jobs" + jobName + "/getJobs?" + "startedTime=" + startTime + "&finishedTime="+finishTime;
+
+            $.getJSON(requestUrl, function (json) {
+                var jobLogList = [];
+                $.each(json, function (index, value) {
+                    jobLogList[index] = {
+                        JobName: value.jobName,
+                        Host: value.host,
+                        StartedTime: value.startedTime,
+                        FinishedTime:value.finishedTime,
+                        Message:value.message,
+                    };
+                });
+                $("#jobLogs").loadTemplate($("#jobLogDetail"), jobLogList);
+            });
+        });
+    }
+
+    function date2Str(dateNumber) {
+        var date = new Date(dateNumber)
+        var year = date.getFullYear()
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+
+        return year + "."+ month + "." + day + "." + hour + "-" + minute + "-" + second + ""
+
+    }
+
+    function doOperation(item) {
+        $(function () {
+            var requestUrl;
+            var btnText = $.trim(item.innerHTML);
+            if (btnText == "Save") {
+                var cornExpression = $(item).parents('tr').find('input').val();
+                requestUrl = item.getAttribute('data-url') + encodeURIComponent(cornExpression);
+            } else if (btnText == "AddJob") {
+                var jobName = '';
+                var queryParams = '';
+                $.each($(item).parents('tr').parent('tbody').find('tr'), function (index, trItem) {
+                    var input = $(trItem).find('input');
+                    var key = input.attr('name');
+                    var value = input.val();
+                    if (key == 'jobName') {
+                        jobName = value;
+                    } else if (key == 'params') {
+                        queryParams += value + '&';
+                    } else {
+                        queryParams += key + "=" + encodeURIComponent(value) + "&";
+                    }
+                    requestUrl = '/amjob/jobs' + jobName + '/create?' + queryParams;
+                });
+            } else if (btnText == "DeleteJob") {
+                var jobName = $(item).parents('tr').find('input').val();
+                requestUrl = '/amjob/jobs' + jobName + '/delete';
+            } else {
+                requestUrl = item.getAttribute('data-url');
+            }
+
+            $.ajax({
+                url: requestUrl,
+                type: "GET",
+                success: function (result) {
+                    console.log(">>>>>>>> Hello world")
+                    console.log(result);
+                    $('#resultModalMsg').html(result.data);
+                },
+                error: function (result) {
+                    $('#resultModalMsg').html(result.status + " " + result.code + " - " + result.msg);
+                }
+            });
+
+            $('#resultModal').modal().on('hidden.bs.modal', function () {
+                window.location.reload();
+            });
+        });
+    }
+
+</script>
+
+</body>
+</html>

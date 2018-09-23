@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beautyboss.slogen.simplejobserver.mapper.SimpleJobLogMapper">
+
+    <sql id="tableName">simple_job_log</sql>
+
+    <insert id="addOneJobLog" parameterType="map">
+        INSERT INTO
+        <include refid="tableName"/>
+        (JobName,StartedTime,host,AddTime)
+        VALUES
+        (#{amJobLog.jobName},#{amJobLog.startedTime},#{amJobLog.host},now())
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+
+    </insert>
+
+    <update id="updateOneJobLogFinishedTime" parameterType="map">
+        UPDATE
+        <include refid="tableName"/>
+        SET FinishedTime = #{simpleJobLog.finishedTime},Message=#{simpleJobLog.message}
+        WHERE ID = #{simpleJobLog.id}
+    </update>
+
+
+    <update id="updateOneJobLogExceptionMessage" parameterType="map">
+        UPDATE
+        <include refid="tableName"/>
+        SET Message = #{simpleJobLog.message}
+        WHERE ID = #{simpleJobLog.id}
+    </update>
+
+    <select id="getJobLogByNameAndTime" parameterType="map" resultType="com.beautyboss.slogen.simplejobserver.data.SimpleJobLog">
+        select JobName,StartedTime,FinishedTime,host,Message
+        from
+        <include refid="tableName"/>
+        WHERE
+        JobName = #{jobName}
+        AND
+        StartedTime between #{startedTime} AND #{finishedTime}
+    </select>
+</mapper>
+
+
+

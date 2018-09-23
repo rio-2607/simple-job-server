@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beautyboss.slogen.simplejobserver.mapper.SimpleJobSwitchMapper">
+
+    <resultMap id="simpleJobLogMap" type="com.beautyboss.slogen.simplejobserver.data.SimpleJobSwitch">
+        <result property="id" column="ID"/>
+        <result property="jobName" column="JobName"/>
+        <result property="status" column="Status"/>
+        <result property="addTime" column="AddTime"/>
+        <result property="updateTime" column="UpdateTime"/>
+    </resultMap>
+
+    <sql id="tableName">simple_job_switch</sql>
+
+    <sql id="fields">
+        JobName,
+        Status,
+        AddTime,
+        UpdateTime
+    </sql>
+
+    <insert id="create" parameterType="map">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="fields"/>
+        )
+        VALUES
+        (
+        #{simpleJobLog.jobName},
+        #{simpleJobLog.status},
+        now(),
+        now()
+        )
+    </insert>
+
+    <update id="turnOn" parameterType="map">
+        update
+        <include refid="tableName"/>
+        set status = 1
+        where jobName= #{jobName}
+    </update>
+
+    <update id="turnOff" parameterType="map">
+        update
+        <include refid="tableName"/>
+        set status = 0
+        where jobName= #{jobName}
+    </update>
+
+    <select id="getSwitch" parameterType="map" resultMap="simpleJobLogMap">
+        select
+        ID,
+        <include refid="fields"/>
+        from
+        <include refid="tableName"/>
+        where JobName = #{jobName}
+    </select>
+</mapper>
