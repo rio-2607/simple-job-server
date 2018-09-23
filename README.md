@@ -19,3 +19,6 @@ public class MyJob extends ClusterJob {
 
 #### 原理
 ![原理](http://ol76akva4.bkt.clouddn.com/AmJobServer.png)
+ 
+#### 链接
+![Quartz分享](http://beautyboss.farbox.com/post/dts/quartzfen-xiang)
