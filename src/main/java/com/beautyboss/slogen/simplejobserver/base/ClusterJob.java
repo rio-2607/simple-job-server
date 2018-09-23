@@ -2,7 +2,7 @@ package com.beautyboss.slogen.simplejobserver.base;
 
 import com.beautyboss.slogen.simplejobserver.enums.TaskTypeEnum;
 import com.beautyboss.slogen.simplejobserver.lock.ClusterLock;
-import com.beautyboss.slogen.simplejobserver.register.AmQuartzJob;
+import com.beautyboss.slogen.simplejobserver.register.SimpleQuartzJob;
 import com.beautyboss.slogen.simplejobserver.utils.DateUtils;
 import com.beautyboss.slogen.simplejobserver.data.SimpleJobLog;
 import com.beautyboss.slogen.simplejobserver.mapper.SimpleJobLogMapper;
@@ -61,20 +61,20 @@ public abstract class ClusterJob extends QuartzJobBean implements StatefulJob,In
 
 
     public String jobName() {
-        AmQuartzJob amQuartzJob = AnnotationUtils.findAnnotation(this.getClass(),AmQuartzJob.class);
-        if(null == amQuartzJob) {
+        SimpleQuartzJob simpleQuartzJob = AnnotationUtils.findAnnotation(this.getClass(),SimpleQuartzJob.class);
+        if(null == simpleQuartzJob) {
             return this.getClass().getSimpleName();
         }
-        return amQuartzJob.name();
+        return simpleQuartzJob.name();
     }
 
     private TaskTypeEnum jobType() {
-        AmQuartzJob amQuartzJob = AnnotationUtils.findAnnotation(this.getClass(),AmQuartzJob.class);
-        if(null == amQuartzJob) {
+        SimpleQuartzJob simpleQuartzJob = AnnotationUtils.findAnnotation(this.getClass(),SimpleQuartzJob.class);
+        if(null == simpleQuartzJob) {
             // 没有的话默认为分布式需要抢锁的任务
             return TaskTypeEnum.SINGLE;
         }
-        String type = amQuartzJob.type();
+        String type = simpleQuartzJob.type();
         if(TaskTypeEnum.ALL.getType().equals(type)) {
             return TaskTypeEnum.ALL;
         }

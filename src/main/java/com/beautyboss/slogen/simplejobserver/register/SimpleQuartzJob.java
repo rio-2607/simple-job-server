@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface AmQuartzJob {
+public @interface SimpleQuartzJob {
 
     String name();
 

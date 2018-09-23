@@ -202,7 +202,7 @@
 <script type="text/javascript">
 
     $(function () {
-        var jobListUrl = '/amjob/jobs/list';
+        var jobListUrl = '/simplejob/jobs/list';
         $.getJSON(jobListUrl, function (json) {
             var jobList = [];
             if(10000 == json.status) {
@@ -218,11 +218,11 @@
                         NextFireTime: triggerList == null ? "" : triggerList.nextFireTime == null ? "" : date2Str(triggerList.nextFireTime),//.replace(" ", '<br>'),
                         SwitchStatus: value.switchOff ? "Off" : "On",
                         SwitchStatusClass: value.switchOff ? "btn btn-sm btn-default" : "btn btn-sm btn-success",
-                        SwitchStatusUrl: "/amjob/jobs" + (value.switchOff ? "/turnOn" : "/turnOff") + "?jobName=" + value.name,
-                        OptionRun: "/amjob/jobs/run?jobName=" + value.name,
-                        OptionKill: "/amjob/jobs/kill?jobName=" + value.name,
-                        OptionUnlock: "/amjob/jobs/unlock?jobName=" + value.name,
-//                        OptionSaveChange: "/amjob/jobs" + value.name + "/setCronExpression?cronExpression="
+                        SwitchStatusUrl: "/simplejob/jobs" + (value.switchOff ? "/turnOn" : "/turnOff") + "?jobName=" + value.name,
+                        OptionRun: "/simplejob/jobs/run?jobName=" + value.name,
+                        OptionKill: "/simplejob/jobs/kill?jobName=" + value.name,
+                        OptionUnlock: "/simplejob/jobs/unlock?jobName=" + value.name,
+//                        OptionSaveChange: "/simplejob/jobs" + value.name + "/setCronExpression?cronExpression="
                     };
                 });
             }
@@ -238,7 +238,7 @@
             var jobName = $('[name|="searchJobName"]').val();
             var startTime = $('[name|="startTime"]').val();
             var finishTime = $('[name|="finishTime"]').val();
-            var requestUrl = "/amjob/jobs" + jobName + "/getJobs?" + "startedTime=" + startTime + "&finishedTime="+finishTime;
+            var requestUrl = "/simplejob/jobs" + jobName + "/getJobs?" + "startedTime=" + startTime + "&finishedTime="+finishTime;
 
             $.getJSON(requestUrl, function (json) {
                 var jobLogList = [];
@@ -290,11 +290,11 @@
                     } else {
                         queryParams += key + "=" + encodeURIComponent(value) + "&";
                     }
-                    requestUrl = '/amjob/jobs' + jobName + '/create?' + queryParams;
+                    requestUrl = '/simplejob/jobs' + jobName + '/create?' + queryParams;
                 });
             } else if (btnText == "DeleteJob") {
                 var jobName = $(item).parents('tr').find('input').val();
-                requestUrl = '/amjob/jobs' + jobName + '/delete';
+                requestUrl = '/simplejob/jobs' + jobName + '/delete';
             } else {
                 requestUrl = item.getAttribute('data-url');
             }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Date   : 2017/12/24
  */
 @Controller
-@RequestMapping("/amjob/jobs")
+@RequestMapping("/simplejob/jobs")
 public class MainController {
 
     @RequestMapping("/admin")

@@ -32,7 +32,7 @@ public class AnnoJobRegister extends BaseRegister{
     private RegisterResultEnum instant(ClusterJob bean) throws BeansException {
         Class<? extends ClusterJob> jobClass = bean.getClass();
 
-        AmQuartzJob quartzJobAnnotation = AnnotationUtils.findAnnotation(jobClass,AmQuartzJob.class);
+        SimpleQuartzJob quartzJobAnnotation = AnnotationUtils.findAnnotation(jobClass,SimpleQuartzJob.class);
         if(null == quartzJobAnnotation) {
             return RegisterResultEnum.IGNORED;
         }

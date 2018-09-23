@@ -29,7 +29,7 @@ import java.util.*;
  * Date   : 2017/12/24
  */
 @RestController
-@RequestMapping("/amjob/jobs")
+@RequestMapping("/simplejob/jobs")
 public class JobController {
 
     private static Logger logger = LoggerFactory.getLogger(JobController.class);

@@ -1,6 +1,6 @@
 package com.beautyboss.slogen.simplejobserver.base;
 
-import com.beautyboss.slogen.simplejobserver.register.AmQuartzJob;
+import com.beautyboss.slogen.simplejobserver.register.SimpleQuartzJob;
 import com.beautyboss.slogen.simplejobserver.data.SimpleJobSwitch;
 import com.beautyboss.slogen.simplejobserver.mapper.SimpleJobSwitchMapper;
 import com.beautyboss.slogen.simplejobserver.register.AnnoJobRegisterEvent;
@@ -53,14 +53,14 @@ public class JobSwitch implements ApplicationListener{
 
     private void addSwitch(ClusterJob bean) {
         Class<? extends ClusterJob> jobClass = bean.getClass();
-        AmQuartzJob amQuartzJob = AnnotationUtils.findAnnotation(jobClass,AmQuartzJob.class);
-        if(null == amQuartzJob) {
+        SimpleQuartzJob simpleQuartzJob = AnnotationUtils.findAnnotation(jobClass,SimpleQuartzJob.class);
+        if(null == simpleQuartzJob) {
             return;
         }
         logger.info("Create switch for Job [{}].",bean.jobName());
 
         try {
-            String jobName = amQuartzJob.name();
+            String jobName = simpleQuartzJob.name();
 
             SimpleJobSwitch aSwitch = amJobSwitchDao.getSwitch(jobName);
             if (null != aSwitch && jobName.equalsIgnoreCase(aSwitch.getJobName())) {
