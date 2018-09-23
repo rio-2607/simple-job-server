@@ -1,6 +1,6 @@
 #### 一个简单的生产环境可用的分布式任务调度系统
 #### 管理后台
-![ip:9095/simplejob/jobs/admin]()
+`ip:9095/simplejob/jobs/admin`
 ![主页](http://ol76akva4.bkt.clouddn.com/jobserver.png)
 
 #### 使用
