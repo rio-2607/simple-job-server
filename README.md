@@ -1,7 +1,6 @@
 #### 一个简单的生产环境可用的分布式任务调度系统
 #### 管理后台
 `ip:9095/simplejob/jobs/admin`
-![主页](http://ol76akva4.bkt.clouddn.com/jobserver.png)
 ![主页](https://i.loli.net/2019/02/08/5c5d477bbe2ae.png)
 
 #### 使用
@@ -19,7 +18,6 @@ public class MyJob extends ClusterJob {
 ```
 
 #### 原理
-![原理](http://ol76akva4.bkt.clouddn.com/AmJobServer.png)
 ![原理](https://i.loli.net/2019/02/08/5c5d477b928a3.png)
  
 #### 链接
