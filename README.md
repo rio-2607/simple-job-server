@@ -2,6 +2,7 @@
 #### 管理后台
 `ip:9095/simplejob/jobs/admin`
 ![主页](http://ol76akva4.bkt.clouddn.com/jobserver.png)
+![主页](https://i.loli.net/2019/02/08/5c5d477bbe2ae.png)
 
 #### 使用
 继承`ClusterJob`类并实现`clusterExecute()`方法即可，使用`SimpleQuartzJob`注解
@@ -19,6 +20,7 @@ public class MyJob extends ClusterJob {
 
 #### 原理
 ![原理](http://ol76akva4.bkt.clouddn.com/AmJobServer.png)
+![原理](https://i.loli.net/2019/02/08/5c5d477b928a3.png)
  
 #### 链接
 [Quartz分享](http://beautyboss.farbox.com/post/dts/quartzfen-xiang)
