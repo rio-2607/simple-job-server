@@ -21,4 +21,4 @@ public class MyJob extends ClusterJob {
 ![原理](https://i.loli.net/2019/02/08/5c5d477b928a3.png)
  
 #### 链接
-[Quartz分享](http://beautyboss.farbox.com/post/dts/quartzfen-xiang)
+[Quartz分享](http://beautyboss.me/2019/03/29/Quartz%E5%88%86%E4%BA%AB/)
